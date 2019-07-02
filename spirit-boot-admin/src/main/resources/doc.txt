@@ -1,0 +1,39 @@
+sprint boot 文件加载顺序 META/resources > resources > static > public
+    static: css js image http://localhost:8080/js/main.js
+    templates:存放静态页面 jsp html tpl
+    config:存放配置文件，application.properties
+打包成war包
+修改pom package
+修改启动类
+eg.修改SpiritBootApplication
+
+    package org.angrybeard.spiritboot;
+
+    import org.springframework.boot.SpringApplication;
+    import org.springframework.boot.autoconfigure.SpringBootApplication;
+    import org.springframework.boot.web.servlet.MultipartConfigFactory;
+    import org.springframework.context.annotation.Bean;
+
+    import javax.servlet.MultipartConfigElement;
+
+    @SpringBootApplication
+    public class SpiritBootApplication extends SpringBootServletInitializer{
+
+        @Override
+        protected SpringApplicationBuilder configure(SpringApplicationBuilder application){
+            return application.sources(SpiritBootApplication.class);
+        }
+
+        public static void main(String[] args) {
+            SpringApplication.run(SpiritBootApplication.class, args);
+        }
+
+        @Bean
+        public MultipartConfigElement multipartConfigElement() {
+            MultipartConfigFactory factory = new MultipartConfigFactory();
+            factory.setMaxFileSize("10240KB");
+            factory.setMaxRequestSize("102400KB");
+            return factory.createMultipartConfig();
+        }
+
+    }
