@@ -1,8 +1,9 @@
-sprint boot 文件加载顺序 META/resources > resources > static > public
+1、sprint boot 文件加载顺序 META/resources > resources > static > public
     static: css js image http://localhost:8080/js/main.js
     templates:存放静态页面 jsp html tpl
     config:存放配置文件，application.properties
-打包成war包
+
+2、打包成war包
 修改pom package
 修改启动类
 eg.修改SpiritBootApplication
@@ -37,3 +38,25 @@ eg.修改SpiritBootApplication
         }
 
     }
+
+3、深入SpringBoot2.x过滤器Filter讲解和实战
+    默认Filter
+        characterEncodingFilter
+        hiddenHttpMethodFilter
+        httpPutFormContentFilter
+        requestContextFilter
+    Filter优先级
+        Ordered.HIGHEST_PRECEDENCE
+        Ordered.LOWEST_PRECEDENCE
+        低位值更高优先级
+        自定义Filter,避免和默认的Filter优先级一样，不然会冲突
+    注册Filter的bean FilterRegistrationBean
+    同模块里面有相关默认Filter
+        web->servlet->filter
+    自定义Filter
+        a、使用Servlet3.0的注解进行配置
+        b、启动类里面增加 @ServletComponentScan,进行扫描
+        c、新建一个Filter类，implements Filter
+
+        控制chain.doFilter的方法的调用，来实现是否放行
+        场景：权限控制、用户登录（非前后分离）

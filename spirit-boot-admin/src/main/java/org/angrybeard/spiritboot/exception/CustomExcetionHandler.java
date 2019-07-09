@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomExcetionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    BaseResponse handleException(Exception e, HttpServletRequest request) {
+    public BaseResponse handleException(Exception e, HttpServletRequest request) {
         log.error("url={},exception:", request.getRequestURL(), e);
         return BaseResponse.error(e.getMessage());
     }
