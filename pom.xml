@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>spirit-boot-admin</module>
+        <module>spirit-boot-redis</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
