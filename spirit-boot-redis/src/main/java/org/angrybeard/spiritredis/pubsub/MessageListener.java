@@ -19,9 +19,14 @@ public class MessageListener {
     private StringRedisTemplate stringRedisTemplate;
 
     public void receiveMessage(Message message, String pattern) {
-        if (isRan(message.getId(), "ok")) {
-            log.info("topic ={} received={} ", pattern, message);
+        try {
+            if (isRan(message.getId(), "ok")) {
+                log.info("topic ={} received={} ", pattern, message);
+            }
+        } finally {
+            stringRedisTemplate.delete(message.getId());
         }
+
     }
 
     private boolean isRan(String key, Object value) {
