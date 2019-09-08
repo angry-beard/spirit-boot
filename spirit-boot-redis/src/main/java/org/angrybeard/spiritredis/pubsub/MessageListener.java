@@ -1,9 +1,8 @@
 package org.angrybeard.spiritredis.pubsub;
 
 import lombok.extern.slf4j.Slf4j;
+import org.angrybeard.spiritredis.distributedlock.DistributedLock;
 import org.angrybeard.spiritredis.dto.Message;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -16,28 +15,17 @@ import javax.annotation.Resource;
 public class MessageListener {
 
     @Resource
-    private StringRedisTemplate stringRedisTemplate;
+    private DistributedLock distributedLock;
 
     public void receiveMessage(Message message, String pattern) {
+        long time = System.currentTimeMillis() + 5000;
         try {
-            if (isRan(message.getId(), "ok")) {
+            if (distributedLock.lock(message.getId(), String.valueOf(time))) {
                 log.info("topic ={} received={} ", pattern, message);
             }
         } finally {
-            stringRedisTemplate.delete(message.getId());
+            distributedLock.unlock(message.getId(), String.valueOf(time));
         }
-
-    }
-
-    private boolean isRan(String key, Object value) {
-        return stringRedisTemplate.execute((RedisConnection conn) -> {
-            try {
-                return conn.setNX(stringRedisTemplate.getStringSerializer().serialize(key),
-                        stringRedisTemplate.getStringSerializer().serialize(value.toString()));
-            } finally {
-                conn.close();
-            }
-        });
 
     }
 }

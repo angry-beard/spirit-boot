@@ -24,7 +24,7 @@ public class RedisMqTest {
 
     @Test
     public void sendMessage() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1000; i++) {
             Message message = Message.builder()
                     .id(i + "")
                     .context("数羊： 第" + i + "只")
